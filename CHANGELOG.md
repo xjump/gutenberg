@@ -1,5 +1,10 @@
 # Changelog
 
+## (unreleased)
+
+- Add Prolog syntax
+
+
 ## 0.2.2 (2017-11-01)
 
 - Fix shortcodes without arguments being ignored
