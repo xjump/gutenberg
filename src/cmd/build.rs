@@ -11,6 +11,7 @@ pub fn build(config_file: &str, base_url: Option<&str>, output_dir: &str) -> Res
     if let Some(b) = base_url {
         site.config.base_url = b.to_string();
     }
+    site.live_reload = None;
     site.load()?;
     console::notify_site_size(&site);
     console::warn_about_ignored_pages(&site);
