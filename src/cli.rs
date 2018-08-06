@@ -53,7 +53,7 @@ pub fn build_cli() -> App<'static, 'static> {
                     Arg::with_name("output_dir")
                         .short("o")
                         .long("output-dir")
-                        .default_value("public")
+                        .default_value("serve")
                         .takes_value(true)
                         .help("Outputs the generated site in the given path"),
                     Arg::with_name("base_url")
