@@ -87,7 +87,7 @@ impl Site {
         let path = path.as_ref();
         let mut config = get_config(path, config_file);
 
-        let tpl_glob = format!("{}/{}", path.to_string_lossy().replace("\\", "/"), "templates/**/*.*ml");
+        let tpl_glob = format!("{}/{}", path.to_string_lossy().replace("\\", "/"), "templates/**/*.*");
         // Only parsing as we might be extending templates from themes and that would error
         // as we haven't loaded them yet
         let mut tera = Tera::parse(&tpl_glob).chain_err(|| "Error parsing templates")?;
@@ -102,7 +102,7 @@ impl Site {
                 bail!("Theme `{}` is missing a templates folder", theme);
             }
 
-            let theme_tpl_glob = format!("{}/{}", path.to_string_lossy().replace("\\", "/"), "themes/**/*.html");
+            let theme_tpl_glob = format!("{}/{}", path.to_string_lossy().replace("\\", "/"), "themes/**/*.*");
             let mut tera_theme = Tera::parse(&theme_tpl_glob).chain_err(|| "Error parsing templates from themes")?;
             rewrite_theme_paths(&mut tera_theme, &theme);
             tera_theme.build_inheritance_chains()?;
@@ -667,9 +667,11 @@ impl Site {
     /// Renders robots.txt
     pub fn render_robots(&self) -> Result<()> {
         ensure_directory_exists(&self.output_path)?;
+        let mut context = Context::new();
+        context.insert("config", &self.config);
         create_file(
             &self.output_path.join("robots.txt"),
-            &render_template("robots.txt", &self.tera, &Context::new(), &self.config.theme)?,
+            &render_template("robots.txt", &self.tera, &context, &self.config.theme)?,
         )
     }
 
